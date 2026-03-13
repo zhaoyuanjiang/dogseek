@@ -1,0 +1,33 @@
+from scrapling import Fetcher
+import html2text
+
+def openclaw_web_fetch(url):
+    # 初始化 Scrapling Fetcher
+    # Scrapling 會自動處理 User-Agent 等頭部信息
+    fetcher = Fetcher()
+    
+    # 1. 抓取網頁內容
+    response = fetcher.get(url)
+    
+    if response.status_code != 200:
+        return f"Error: 獲取網頁失敗，狀態碼 {response.status_code}"
+
+    # 2. 獲取原始 HTML (Scrapling 提供便捷的選擇器)
+    # 你可以選擇抓取整個 body，或特定的 main 內容以減少噪聲
+    raw_html = response.css("body").get()
+
+    # 3. 配置 html2text 轉換器
+    text_maker = html2text.HTML2Text()
+    text_maker.ignore_links = False      # 是否保留鏈接
+    text_maker.ignore_images = True     # 通常 WebFetch 為了提取文字會忽略圖片
+    text_maker.bypass_tables = False    # 是否保留表格結構
+    text_maker.body_width = 0           # 不限制換行寬度
+
+    # 4. 執行轉換
+    markdown_content = text_maker.handle(raw_html)
+    
+    return markdown_content
+
+# 使用範例
+# result = openclaw_web_fetch("https://example.com")
+# print(result)

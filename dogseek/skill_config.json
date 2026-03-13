@@ -1,0 +1,12 @@
+{
+  "name": "dogseek",
+  "description": "使用 Scrapling 和 html2text 抓取网页内容并转换为 Markdown 格式，支持微信公众号文章分析",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "url": {"type": "string", "description": "要抓取的网页 URL"}
+    },
+    "required": ["url"]
+  },
+  "command": "python3 {{skill_path}}/dogseek.py {{url}}"
+}
